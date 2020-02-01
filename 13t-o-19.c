@@ -17,6 +17,7 @@ void addword() {
 
 // Exercise 1-13
 void lengthsHist() {
+	printf("---- Exercise 1-13 histogram of word lengths ----\n");
 	int c;
 	memset(words, 0, sizeof words);
 	while ((c = getchar()) != EOF) {
@@ -43,6 +44,7 @@ void lengthsHist() {
 
 // Exercise 1-14
 void charHist() {
+	printf("---- Exercise 1-14 histogram of chars ----\n");
 	int characters[127];
 	int c;
 	memset(characters, 0, sizeof(characters));
@@ -82,6 +84,7 @@ float convertKtoC(float k) { return k + 273; }
 
 
 void printLongestLine() { //Exercise 1-16
+	printf("---- Exercise 1-16 print only the longest line ----\n");
 	int len, max;
 	char line[MAXLINE];
 	char longest[MAXLINE];
@@ -98,6 +101,7 @@ void printLongestLine() { //Exercise 1-16
 }
 
 void print80plus() { //Exercise 1-17
+	printf("---- Exercise 1-17 print only 80 plus lines ----\n");
 	int len, cutOff;
 	char line[MAXLINE];
 	char longest[MAXLINE];
@@ -114,6 +118,7 @@ void print80plus() { //Exercise 1-17
 
 
 void removeBlanks() {// Exercise 1-18
+	printf("---- Exercise 1-18 Remove trailing blanks and empty lines ----\n");
 	int len, cutOff;
 	char line[MAXLINE];
 	char trueLine[MAXLINE];
@@ -131,6 +136,20 @@ int getlinex(char s[], int lim) {
 	int c, i;
 
 	for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i) {
+		s[i] = c;
+	}
+	if (c == '\n') {
+		s[i] = c;
+		++i;
+	}
+	s[i] = '\0';
+	return i;
+}
+
+int getAll(char s[], int lim) {
+	int c, i;
+
+	for (i = 0; i < lim - 1 && (c = getchar()) != EOF; ++i) {
 		s[i] = c;
 	}
 	if (c == '\n') {
@@ -182,9 +201,10 @@ void copyNoTrailing(char to[], char from[]) {
 
 // Exercise 1-19
 
-void reverse(char norm[], char to[]) {
+void reverse(char norm[]) {
 	int c = strlen(norm) - 1;
 	int d = 0;
+	char to[MAXLINE];
 	for (; c >= 0; --c) {
 		to[d++] = norm[c];
 	}
@@ -193,26 +213,24 @@ void reverse(char norm[], char to[]) {
 }
 
 void readReverse() {
+	printf("---- Exercise 1-19 reverse the entire input ----\n");
 	int len;
 	char line[MAXLINE];
-	char d[MAXLINE];
 
-	while ((len = getlinex(line, MAXLINE)) > 0) {
-		if (len > 0) {
-			reverse(line, d);
-		}
-	}
+	getAll(line, MAXLINE);
+
+	reverse(line);
 	return;
 }
 
 int main(int argc, const char* argv[]) {
 
-	//lengthsHist();
-	//charHist();
-	//printLongestLine();
-	//print80plus();
-	//removeBlanks();
-	//readReverse();
+	lengthsHist();
+	charHist();
+	printLongestLine();
+	print80plus();
+	removeBlanks();
+	readReverse();
 
 	return 0;
 }
