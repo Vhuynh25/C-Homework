@@ -5,7 +5,7 @@
 #define MAXLINE 1000
 
 char wordbuf[50];
-int words[50];
+int words[50]; // array of word length of the index
 int length;
 
 void copy(char to[], char from[]);
@@ -19,9 +19,9 @@ void addword() {
 void lengthsHist() {
 	printf("---- Exercise 1-13 histogram of word lengths ----\n");
 	int c;
-	memset(words, 0, sizeof words);
+	memset(words, 0, sizeof words); //the entire words array in 0
 	while ((c = getchar()) != EOF) {
-		if (isalpha(c) == 0 && c != '-') {
+		if (isalpha(c) == 0 && c != '-' && c != ''') {
 			addword();
 			length = 0;
 		}
@@ -29,8 +29,6 @@ void lengthsHist() {
 			length++;
 		}
 	}
-
-
 	for (int i = 1; i <= 50; ++i) {
 		printf("%3d: ", i);
 		for (int j = 0; j < words[i]; ++j) {
@@ -47,15 +45,15 @@ void charHist() {
 	printf("---- Exercise 1-14 histogram of chars ----\n");
 	int characters[127];
 	int c;
-	memset(characters, 0, sizeof(characters));
+	memset(characters, 0, sizeof(characters)); // set array characters to 0
 
 	c = getchar();
 	int length = 0;
-	do {
+	do { // use c as index for array character
 		characters[c] += 1;
 	} while ((c = getchar()) != EOF);
 
-	for (length = 32; length <= 127; ++length) {
+	for (length = 32; length <= 127; ++length) { // ignore first 31 characters of ASCII
 		putchar(length);
 		putchar(':');
 		for (int j = 0; j < characters[length]; ++j) {
@@ -107,8 +105,8 @@ void print80plus() { //Exercise 1-17
 	char longest[MAXLINE];
 
 	cutOff = 80;
-	while ((len = getlinex(line, MAXLINE)) > 0) {
-		if (len > cutOff) {
+	while ((len = getlinex(line, MAXLINE)) > 0) { // while getting line, if line length = 80 or greater, printf that line
+		if (len >= cutOff) {
 			copy(longest, line);
 			printf("%s\n", longest);
 		}
@@ -121,12 +119,10 @@ void removeBlanks() {// Exercise 1-18
 	printf("---- Exercise 1-18 Remove trailing blanks and empty lines ----\n");
 	int len, cutOff;
 	char line[MAXLINE];
-	char trueLine[MAXLINE];
 
-	while ((len = getlinex(line, MAXLINE)) > 0) {
+	while ((len = getlineNoTrailing(line, MAXLINE)) > 0) {
 		if (len > 0) {
-			copyNoTrailing(trueLine, line);
-			//printf("%s\n", trueLine);
+			printf("%s\n", line);
 		}
 	}
 	return;
@@ -146,7 +142,37 @@ int getlinex(char s[], int lim) {
 	return i;
 }
 
-int getAll(char s[], int lim) {
+void copy(char to[], char from[]) {
+	int i;
+
+	i = 0;
+	while ((to[i] = from[i]) != '\0') {
+		++i;
+	}
+}
+
+int getlineNoTrailing(char s[], int lim) {
+	int c, i, j;
+	j = 0;
+
+	for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i) {
+		s[i] = c;
+		if (c == '\t' || c == ' ') { j++; } // whitespace start counting
+		else { j = 0; }
+	}
+	if (c == '\n' && j != 0) { // if there is whitespace at the end move i accordingly
+		i = i - j;
+		if (i != 0){ 
+		s[i] = c;
+		++i;
+		}
+	}
+	s[i] = '\0';
+	return i;
+}
+
+// Exercise 1-19
+int getAll(char s[], int lim) { // modified getline to keep going until EOF
 	int c, i;
 
 	for (i = 0; i < lim - 1 && (c = getchar()) != EOF; ++i) {
@@ -159,48 +185,6 @@ int getAll(char s[], int lim) {
 	s[i] = '\0';
 	return i;
 }
-
-void copy(char to[], char from[]) {
-	int i;
-
-	i = 0;
-	while ((to[i] = from[i]) != '\0') {
-		++i;
-	}
-}
-
-
-void copyNoTrailing(char to[], char from[]) {
-	int i, j, k, state;
-	char buf[MAXLINE];
-	//memset(buf, '\0', sizeof buf);
-
-	state = j = k = i = 0;
-	while (from[i] != '\0') {
-		if (from[i] == ' ' || from[i] == '\t') {
-			state = 1;
-			buf[k++] = from[i];
-			//buf[k] = '\0';
-		}
-		else if (state == 1) {
-			state = 0;
-			strcpy_s(to + j,MAXLINE, buf);
-			j = j + k;
-			k = 0;
-			to[j++] = from[i];
-			to[j] = '\0';
-		}
-		else {
-			to[j++] = from[i];
-			to[j] = '\0';
-		}
-		++i;
-	}
-	printf("%s", to);
-}
-
-// Exercise 1-19
-
 void reverse(char norm[]) {
 	int c = strlen(norm) - 1;
 	int d = 0;
