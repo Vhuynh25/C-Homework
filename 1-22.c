@@ -1,29 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
 
-bool openFiles(int argc, const char* argv[]){
-  FILE** pfin;
-  FILE** pfout;
-  int* n ;
-  if (argc != 4){return FALSE;}
-  *pfin = fopen(argv[1], "r");
-  
-  if (fin == NULL){
-    fprintf(stderr, "Input file could not be opened");
-    return FALSE;
-  }
-  *fout = fopen(argv[2],"w");
-  if (fout == NULL){
-    fprintf(stderr, "Output file could not be opened");
-    fclose ()
-    return FALSE;
-  }
-  return TRUE;
-}
+#include <stdlib.h>
+#include <fileopen.h>
 
 int main(int argc,const char* argv[]){
-  if (openFiles(argc,argv[]) != TRUE){
+  if (openFiles(argc,argv) != false){
     fprintf(stderr, "Usage: ./fold inputfile outputfile int\n");
     return 1;
   }
