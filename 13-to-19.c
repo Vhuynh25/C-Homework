@@ -21,7 +21,7 @@ void lengthsHist() {
 	int c;
 	memset(words, 0, sizeof words); //the entire words array in 0
 	while ((c = getchar()) != EOF) {
-		if (isalpha(c) == 0 && c != '-' && c != ''') {
+		if (isalpha(c) == 0 && c != '-' && c != '\'') {
 			addword();
 			length = 0;
 		}
