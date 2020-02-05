@@ -1,6 +1,6 @@
 
 #include <stdlib.h>
-#include <fileopen.h>
+#include "fileopen.h"
 
 int main(int argc,const char* argv[]){
   if (openFiles(argc,argv) != false){
@@ -10,6 +10,7 @@ int main(int argc,const char* argv[]){
   FILE* fin = fopen(argv[1],"r");
   FILE* fout = fopen(argv[2],"w");
   int count = 0;
+  
   int t = atoi(argv[3]);
   
   char c;
