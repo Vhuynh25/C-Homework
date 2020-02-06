@@ -23,8 +23,8 @@ int main(int argc, const char* argv[]) {
     }
     else if (c == '/') {
       temp = c;
-      if (c = fgetc(fin) == '/') { state = 2; }
-      else if (c = fgetc(fin) == '*') { state = 1; }
+      if ((c = fgetc(fin)) == '/') { state = 2; }
+      else if (c == '*') { state = 1; }
       else { fputc(c, fout); }
     }
     else if (state == 0 ) {
