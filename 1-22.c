@@ -1,9 +1,10 @@
 
 #include <stdlib.h>
 #include "fileopen.h"
+#define DEFAULT_INTERVAL 10
 
 int main(int argc,const char* argv[]){
-  if (openFiles(argc,argv) != false){
+  if (openFiles(argc,argv) != true){
     fprintf(stderr, "Usage: ./fold inputfile outputfile int\n");
     return 1;
   }
@@ -11,7 +12,7 @@ int main(int argc,const char* argv[]){
   FILE* fout = fopen(argv[2],"w");
   int count = 0;
   
-  int t = atoi(argv[3]);
+    int t = argc == 4 ? atoi(argv[3]):DEFAULT_INTERVAL;
   
   char c;
   while((c = fgetc(fin)) != EOF){
