@@ -11,12 +11,19 @@ int strlenx(char* s){
     while(*s != '\0'){count++;
         s++;
     }
-    return count
+    return count;
 }
 
 char* strcatx(char* to, char* from){
     char* p = to;
-    to += strlen(to);
-    while(*from! = '\0'){*to++=*from++;}
+    while(*to != '\0'){++to;}
+    while(*from != '\0'){*to++=*from++;}
     return p;
+}
+
+int main(int argc, const char* argv[]){
+    char* a = "Hi, how are ya";
+    char* b = "John";
+    strcatx(a,b);
+    printf("%s",a);
 }
