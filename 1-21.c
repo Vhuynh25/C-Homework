@@ -1,4 +1,4 @@
-#include <fileopen.h>
+#include "fileopen.h"
 #include <stdlib.h>
 
 int main(int argc, char* argv[]){
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]){
       state = 1;
       ++count;
     }
-    else if (state == 1){
+    else if (state == 1 && c != ' '){
       while (count >= t){
 	fputc('\t',fout);
 	count -= t;
@@ -33,6 +33,8 @@ int main(int argc, char* argv[]){
 	fputc(' ', fout);
 	--count;
       }
+        state = 0;
+        fputc(c,fout);
     }
     else{
     fputc(c,fout);
