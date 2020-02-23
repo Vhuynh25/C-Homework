@@ -16,15 +16,13 @@ int getop_(char*);
 int getch_();
 void ungetch_(int);
 double atof_(const char*);
-void readVars();
-void getVars();
 void doFuncs();
 
 
 #define MAXVAL 100
 size_t sp = 0;
 double val[MAXVAL];
-int vars[26];
+double vars[26];
 
 char buf[BUFSIZ];
 int bufp = 0;
@@ -34,6 +32,7 @@ void rpm(){
     int type;
     double op2;
     char s[BUFSIZ];
+    int last;
     
     while((type = getop_(s)) != EOF){
       switch(type){
@@ -41,8 +40,7 @@ void rpm(){
 	break;
       case NUMBER: push(atof_(s));
 	break;
-      case '+': printf("Adding\n");
-	push(pop() + pop());
+      case '+': push(pop() + pop());
 	break;
       case '*': push(pop() * pop());
 	break;
@@ -57,23 +55,40 @@ void rpm(){
 	break;
       case '^': push(pow(pop(),pop()));
 	break;
-      case '=': readVars();
+      case '=': pop();
+	if (last >= 'a' && last <= 'z'){
+	  vars[last-'a'] = pop();
+	  push(vars[last-'a']);
+      }
+	else
+	  printf("No variable name");
 	break;
-      case '@': getVars();
+      case '!': push(sin(pop()));
 	break;
-      case '#': bufp = 0;
-	char f;
-	printf("Enter function name:");
-	while ((f = getc(stdin)) != '\n'){
-	  buf[bufp++] = f;
-	}
-	doFuncs();
+      case '@': push(cos(pop()));
+	break;
+      case '#': push(tan(pop()));
+	break;
+      case '$': op2 = pop();
+	push(op2);
+	push(op2);
+	break;
+      case '&': push(exp(pop()));
+	break;
+      case '_': op2 = pop();
+	printf("\t%.8g\n",op2);
+	push(op2);
 	break;
       default:
-	fprintf(stderr, "error: unknown command\n");
+	if (type >= 'a' && type <= 'z')
+	  push(vars[type-'a']);
+	else 
+	  fprintf(stderr, "error: unknown command\n");
 	break;
       }
+      last = type;
     }
+    return;
 }
 
 int main(int argc, const char* argv[]){
@@ -145,54 +160,4 @@ double atof_(const char* s){
   return sign * val/power;
 }
 
-void doFuncs(){
-  double op2;
-  if (strstr(buf,"cos") != NULL){
-    push(cos(pop()));}
-  if (strstr(buf,"sin") != NULL){
-    push(sin(pop()));}
-  if (strstr(buf,"tan") != NULL){
-    push(tan(pop()));}
-  if (strstr(buf,"dupe") != NULL){
-      op2 = pop();
-      push(op2);
-      push(op2);
-  }
-  if (strstr(buf,"exp") != NULL){
-    push(exp(pop()));
-  }
-  if (strstr(buf,"top") != NULL){
-    op2 = pop();
-    printf("\t%.8g\n",op2);
-    push(op2);
-  }
-  return ;
-}
 
-void readVars(){
-  printf("Enter variable name (a-z):");
-  char te = 'a';
-  do {
-    te = getc(stdin);
-  } while(te == '\n');
-  if (islower(te) != 0){
-    vars[te - 'a'] = pop();
-    push(vars[te - 'a']);
-  }
-  else {
-    fprintf(stderr, "Error: invalid variable name\n");
-    printf("%c\n", te);
-  }
-  return;
-}
-
-void getVars(){
-  printf("Enter variable name (a-z):");
-  char v;
-  do{
-    v = getc(stdin);
-  } while (islower(v) == 0);
-	//new plan use as placeholders for variables and functions
-  printf("%c\n",v);
-  push(vars[v - 'a']);
-}
