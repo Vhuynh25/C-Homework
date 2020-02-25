@@ -56,8 +56,9 @@ void rpm(){
     double op2;
     char s[BUFSIZ];
     int last;
-    struct tnode* vars;
+    struct tnode* vars = NULL;
     char varname[MAXVAL];
+    char c;
     int i;
 
     while((type = getop_(s)) != EOF){
@@ -72,16 +73,19 @@ void rpm(){
       case MATH: math(s);                     break;
 
       case '=': i = 0;
-      while((s[0] = c = getch_()) == ' ' || c == '\t'){}
-      while(isalpha(varname[i++] = getc(stdin))){}
-      varname[i] = '\0';
-      addtree(vars,varname,pop());            break;
+      while((s[0] = c = getc(stdin)) == ' ' || c == '\t'){}
+      while(isalpha(varname[i++] = c)){ c = getc(stdin);}
+      varname[i-1] = '\0';
+      printf("%s\n", varname);
+      vars = addtree(vars,varname,pop());     break;
 
       case '?': i = 0;
-      while((s[0] = c = getch_()) == ' ' || c == '\t'){}
-      while(isalpha(varname[i++] = getc(stdin))){}
-      varname[i] = '\0';
-      getvar(vars,varname);                   break;
+      while((s[0] = c = getc(stdin)) == ' ' || c == '\t'){}
+      while(isalpha(varname[i++] = c)){ c = getc(stdin);}
+      varname[i-1] = '\0';
+      printf("%s\n", varname);
+      push(getvar(vars,varname));             break;
+      case '>': treeprint(vars);              break;
 
       case '/': if ((op2 = pop()) == 0.0 ) {
         fprintf (stderr, "Error: attempt to divide by zero\n");
@@ -202,6 +206,7 @@ void math(char* s){
 
 struct tnode *addtree(struct tnode *p, char* w,double val){
   int cond;
+  
   if (p ==NULL){
     p = talloc();
     p->word = strdup(w);
@@ -210,7 +215,7 @@ struct tnode *addtree(struct tnode *p, char* w,double val){
   } else if((cond = strcmp(w, p->word)) == 0)
     {p->val = val;}
     else if (cond < 0){
-      p->left =addtree(p->left,w, val);
+      p->left = addtree(p->left,w, val);
     }
     else {
       p->right = addtree(p->right,w, val);
@@ -227,10 +232,13 @@ void treeprint(struct tnode *p){
 
 double getvar(struct tnode *p, const char* w){
   int cond;
-  if (p == NULL)   {
+  if (p == NULL){
     return 0.0;
   }
-  else if((cond = strcmp(w, p->word)) == 0) {return p->val;}
+  else if((cond = strcmp(w, p->word)) == 0) {
+    printf("Getting node\n");
+    return p->val;
+  }
   else if (cond < 0){
     return getvar(p->left,w);
   }
