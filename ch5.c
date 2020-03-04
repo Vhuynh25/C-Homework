@@ -62,7 +62,7 @@ void teststrncat_(){
 
 char* strchr_( char* cs,char c){
   char*p = NULL;
-  while(cs != '\0' && *cs != c){cs++;}
+  while(*cs != '\0' && *cs != c){cs++;}
   if (*cs == c){p = cs;}
   return p;
 }
@@ -111,7 +111,8 @@ void teststrcspn_(){
 
 char *strpbrk_(const char* cs, char* ct){
   while(*cs != '\0'){
-    if (strchr(ct,*cs) != NULL){return strchr(ct*cs);}
+    if (strchr(cs,*ct) != NULL){return strchr(cs,*ct);}
+    cs++;
   }
   return NULL;
 }
@@ -123,26 +124,28 @@ void teststrpbrk_(){
   printf("%s\n", test);
 }
 
-char *strstr_(const char* cs, char* ct){
-  const char* p = ct;
-  const char* ptr = NULL;
+char *strstr_(const char* cs,const char* ct){
+  const char* p = NULL;
   while(*cs != '\0'){
-    p = ct;
-    while (*p != '\0'){
-      if (*p == *cs){
-        while()
-        ptr = p;
-      }
-      else{
-
-        p++;
-      }
+    if (strncmp(cs,ct,strlen(ct)) == 0){
+      p = cs;
+      return p;
     }
-    cs++;
+    else{
+      cs++;
+    }
   }
 
-  return NULL;
+  return p;
 }
+
+void teststrstr_(){
+  const char* test = strstr_("elite","ite");
+  printf("%s\n", test);
+  test = strstr_("starforce","force");
+  printf("%s\n", test);
+}
+
 
 int main(int argc, const char* argv[]){
   //teststrcat_();
@@ -152,5 +155,6 @@ int main(int argc, const char* argv[]){
   teststrspn_();
   teststrcspn_();
   teststrpbrk_();
+  teststrstr_();
 
 }
