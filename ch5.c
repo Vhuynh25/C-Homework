@@ -146,6 +146,21 @@ void teststrstr_(){
   printf("%s\n", test);
 }
 
+int strlen_(const char* cs){
+  int i = 0;
+  while (*cs != '\0'){
+    i++;
+    cs++;
+  }
+  return i;
+}
+
+void teststrlen_(){
+  int test = strlen_("elite");
+  printf("%d\n", test);
+  test = strlen_("starforce");
+  printf("%d\n", test);
+}
 
 int main(int argc, const char* argv[]){
   //teststrcat_();
@@ -156,5 +171,6 @@ int main(int argc, const char* argv[]){
   teststrcspn_();
   teststrpbrk_();
   teststrstr_();
+  teststrlen_();
 
 }
