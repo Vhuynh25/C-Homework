@@ -161,6 +161,34 @@ void teststrlen_(){
   test = strlen_("starforce");
   printf("%d\n", test);
 }
+char* ptr = NULL;
+
+char* strtok_(char* s, const char* ct){
+    if (s != NULL){
+      ptr = s;
+    }
+    if (strlen(ptr) == 0){ return NULL;}
+    size_t prefix = strcspn(ptr, ct);
+    size_t suffix = strspn(ptr + prefix, ct);
+    char* token = ptr;
+    char* q = ptr + prefix;
+    *q = '\0';
+    ptr = q + suffix;
+    return token;
+}
+
+void teststrtok_(){
+  char test[1000] = "Help people interested in this repository understand your project by adding a README.";
+  char testdupe[1000] = "Help people interested in this repository understand your project by adding a README.";
+  char* t1 = strtok_(test, " .\0");
+  char* t2 = strtok(testdupe, " .\0");
+  while (t1 != NULL && t2 != NULL){
+    printf("%s\n", t2);
+    printf("%s\n", t2);
+    t2 = strtok(NULL, " .\0");
+    t1 = strtok_(NULL," .\0"); 
+  }
+}
 
 int main(int argc, const char* argv[]){
   //teststrcat_();
@@ -172,5 +200,6 @@ int main(int argc, const char* argv[]){
   teststrpbrk_();
   teststrstr_();
   teststrlen_();
+  teststrtok_();
 
 }
