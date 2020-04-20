@@ -1,0 +1,2 @@
+exer:
+	gcc 6-4.c dlist.c -o exer -g
