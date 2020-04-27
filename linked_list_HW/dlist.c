@@ -62,7 +62,7 @@ void dlist_pushfront(dlist* l, int data) {
   }
   else {
     newhead = dnode_create(data,NULL,l->head);
-    l->head = newhead;
+    newhead->next->prev = l->head = newhead;
   }
   l->size += 1;
 }
@@ -76,7 +76,7 @@ void dlist_pushback(dlist* l, int data) {
   }
   else {
     newtail = dnode_create(data,l->tail,NULL);
-    l->tail = newtail;
+    newtail->prev->next = l->tail = newtail;
   }
   l->size += 1;
 }
