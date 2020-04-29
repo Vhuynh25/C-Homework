@@ -16,6 +16,35 @@ dlist* dlist_create(void){
   return newlist;
 }
 
+void dnode_print(dnode* a){
+  if (a!=NULL)printf("%d\n",a->data);
+}
+
+void dnode_swap(dnode* a,dnode* b){
+  if (a==b){return;}
+  dnode* p = a->prev;
+  dnode* n = a->next;
+  dnode_print(a->next);
+  dnode_print(b->next);
+  dnode_print(a->prev);
+  dnode_print(b->prev);
+  
+  a->next = b->next;
+  if (a->next != NULL) a->next->prev = a;
+  a->prev = b->prev;
+  if (a->prev != NULL) a->prev->next = a;
+
+  
+  b->next = n;
+  if (n != NULL) b->next->prev = b;
+  b->prev = p;
+  if (p != NULL) b->prev->next = b;
+  dnode_print(a->next);
+  dnode_print(b->next);
+  dnode_print(a->prev);
+  dnode_print(b->prev);
+}
+
 bool dlist_empty(dlist* list){return list->size == 0;}
 size_t dlist_size(dlist* list){return list->size;}
 
@@ -62,7 +91,8 @@ void dlist_pushfront(dlist* l, int data) {
   }
   else {
     newhead = dnode_create(data,NULL,l->head);
-    newhead->next->prev = l->head = newhead;
+    l->head->prev = newhead;
+    l->head = newhead;
   }
   l->size += 1;
 }
@@ -76,7 +106,8 @@ void dlist_pushback(dlist* l, int data) {
   }
   else {
     newtail = dnode_create(data,l->tail,NULL);
-    newtail->prev->next = l->tail = newtail;
+    l->tail->next = newtail;
+    l->tail = newtail;
   }
   l->size += 1;
 }
@@ -98,6 +129,13 @@ void dlist_print(dlist* l, const char* msg){
     printf("%p <-- %d(%p) --> %p\n",(void*)index->prev,index->data,(void*)index,(void*)index->next);
     index = index->next;
   }
+}
+
+void dlist_swaptest(dlist* l){
+  dnode_swap(l->head,l->tail);
+  dnode* h = l->head;
+  l->head = l->tail;
+  l->tail = h;
 }
 
 int dlist_front(dlist* list){return list->head->data;}

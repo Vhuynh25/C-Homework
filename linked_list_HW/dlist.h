@@ -32,6 +32,7 @@ struct dlist {
 //-------------------------------------------------
 dnode* dnode_create(int data, dnode* prev, dnode* next);
 dlist* dlist_create(void);
+void dnode_swap(dnode* a,dnode* b);
 
 bool dlist_empty(dlist* list);
 size_t dlist_size(dlist* list);
@@ -44,6 +45,7 @@ void dlist_pushback(dlist* list, int data);
 
 void dlist_clear(dlist* list);
 void dlist_print(dlist* list, const char* msg);
+void dlist_swaptest(dlist* l);
 
 int dlist_front(dlist* list);
 int dlist_back(dlist* list);
