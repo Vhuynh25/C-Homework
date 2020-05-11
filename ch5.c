@@ -110,9 +110,9 @@ void teststrcspn_(){
 }
 
 char *strpbrk_(const char* cs, char* ct){
-  while(*cs != '\0'){
+  while(*ct != '\0'){
     if (strchr(cs,*ct) != NULL){return strchr(cs,*ct);}
-    cs++;
+    ct++;
   }
   return NULL;
 }
